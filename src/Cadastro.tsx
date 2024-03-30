@@ -7,10 +7,13 @@ import { useState } from 'react';
 import { secoes } from './utils/CadastroEntradaTexto';
 export default function Cadastro() {
   const [numSecao, setNumSecao] = useState(0);
+  const [dados, setDados] = useState({} as any);
 
   function avancarSecao() {
     if(numSecao < secoes.length -1) {
       setNumSecao(numSecao + 1);
+    }else{
+      console.log(dados);
     }
   }
 
@@ -18,6 +21,10 @@ export default function Cadastro() {
     if(numSecao > 0) {
       setNumSecao(numSecao - 1);
     }
+  }
+
+  function atualizarDados(id: string, valor: string){
+    setDados({...dados, [id]: valor })
   }
 
   return (
@@ -31,11 +38,16 @@ export default function Cadastro() {
       <Box>
         {
           secoes[numSecao]?.entradaTexto?.map(entrada => {
-          return <EntradaTexto
-            key={entrada.id}
-            label={entrada.label}
-            placeholder={entrada.placeholder}
-          />
+          return (
+            <EntradaTexto
+              key={entrada.id}
+              label={entrada.label}
+              placeholder={entrada.placeholder}
+              secureTextEntry={entrada.secureTextEntry}
+              value={dados[entrada.label]}
+              onChangeText={(text) => atualizarDados(entrada.name, text)}
+            />
+          )
           })
         }
       </Box>
